@@ -1,19 +1,30 @@
 "use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { HamburgerIcon, MenuIcon, XIcon } from "lucide-react";
+import { LogOutIcon, MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { SignOut } from "@/lib/actions/auth";
 
-const Navbar = () => {
+type session = typeof auth.$Infer.Session;
+const Navbar = ({ session }: { session: session | null }) => {
   const [isMobileOpen, setisMobileOpen] = useState<boolean>(false);
   const router = useRouter();
+
+  async function handlelogout() {
+    await SignOut();
+    router.push("/auth/sign-in");
+  }
+  async function handlelogin() {
+    router.push("/auth/sign-in");
+  }
   return (
     <nav
       className="
         w-full max-w-6xl mx-auto mt-6 px-6 py-3
         flex items-center justify-between
-        bg-white/10 backdrop-blur-lg
+        bg-white/10 backdrop-blur-2xl
         border border-white/20 rounded-2xl
         shadow-lg
       "
@@ -56,14 +67,24 @@ const Navbar = () => {
 
       {/* Auth / Action Button */}
       <div className=" items-center space-x-4 hidden md:flex">
-        <Link href="/auth/sign-in">
+        {!session ? (
           <Button
+            onClick={handlelogin}
             variant="outline"
-            className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer"
+            className="text-white flex items-center bg-black border-white/30 hover:bg-black/70 cursor-pointer"
           >
             Login
           </Button>
-        </Link>
+        ) : (
+          <Button
+            onClick={handlelogout}
+            variant="outline"
+            className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer"
+          >
+            <LogOutIcon />
+            LogOut
+          </Button>
+        )}
       </div>
       {/* mobile layout */}
       <div className="md:hidden" onClick={() => setisMobileOpen(!isMobileOpen)}>
