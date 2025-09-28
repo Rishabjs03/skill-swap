@@ -56,12 +56,12 @@ const Navbar = ({ session }: { session: session | null }) => {
           </Link>
         </li>
         <li>
-          <Link
-            href="/profile"
-            className="hover:text-coral-500 transition-colors"
+          <div
+            onClick={() => router.push(`/profile/${session?.user.id}`)}
+            className="hover:text-coral-500 transition-colors cursor-pointer"
           >
             Profile
-          </Link>
+          </div>
         </li>
       </ul>
 

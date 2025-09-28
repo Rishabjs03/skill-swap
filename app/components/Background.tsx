@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Background() {
   return (
-    <div className="fixed top-0 left-0 w-full h-full -z-10 bg-cover bg-center">
+    <div className="fixed top-0 left-0 w-full h-full  -z-10 bg-cover bg-center">
       <div className="min-h-screen w-full relative">
         {/* Radial Gradient Background from Top */}
         <div
