@@ -37,6 +37,7 @@ model Skill {
   id          String   @id @default(cuid())
   title       String
   description String
+  category    String?
   rate        Float
   owner       User     @relation(fields: [ownerId], references: [id])
   ownerId     String
