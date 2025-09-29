@@ -27,6 +27,7 @@ interface UserProps {
 
 const ProfilePage = () => {
   const [user, setuser] = useState<UserProps | null>(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -62,7 +63,10 @@ const ProfilePage = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-4">
                     <Avatar className="h-20 w-20 ring-2 ring-white/40 shadow-xl">
-                      <AvatarImage src="/default.jpg" alt="user" />
+                      <AvatarImage
+                        src={user?.image || "/default.jpg"}
+                        alt="user"
+                      />
                       <AvatarFallback className="text-lg font-semibold">
                         U
                       </AvatarFallback>
@@ -75,9 +79,11 @@ const ProfilePage = () => {
                       <div className="flex flex-wrap gap-2 pt-2">
                         <Badge
                           variant="outline"
-                          className="border-gray-400 text-gray-700"
+                          className="border-gray-400  rounded-full text-gray-700"
                         >
-                          {user?.skills.length || 0} Skills
+                          <span className="font-semibold py-1 px-1">
+                            {user?.skills.length || 0} Skills
+                          </span>
                         </Badge>
                       </div>
                     </div>

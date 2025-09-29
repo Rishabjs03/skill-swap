@@ -2,8 +2,10 @@
 
 import { headers } from "next/headers"
 import { auth } from "../auth"
-import { PrismaClient } from "../generated/prisma"
 import { revalidatePath } from "next/cache"
+
+import { PrismaClient } from "../generated/prisma"
+import { uploadToCloudinary } from "../cloudinary/cloudinary"
 
 const prisma = new PrismaClient()
 
@@ -58,31 +60,32 @@ export async function UpdateProfileAction(formData: FormData) {
     }
 
     const name = formData.get("name") as string;
+    const email = formData.get("email") as string
     const bio = formData.get("bio") as string;
     const skills = JSON.parse(formData.get("skills") as string) as string[];
     const avatarFile = formData.get("avatar") as File | null;
 
+    let imageUrl: string | null = null;
     // 1️⃣ Handle avatar upload (optional)
-    const imageUrl: string | null = null;
     if (avatarFile) {
-        // Cloudinary / Supabase storage etc.
-        // Example pseudo code:
-        // imageUrl = await uploadFileToCloud(avatarFile)
+        const uploadResult = (await uploadToCloudinary(avatarFile))
+        imageUrl = uploadResult.secure_url;
     }
+
 
     // 2️⃣ Update user
     const updatedUser = await prisma.user.update({
         where: { id: session?.user.id },
         data: {
-            name,
-            bio,
+            name: name,
+            email: email,
+            bio: bio,
             image: imageUrl || undefined, // agar null hai to ignore
         },
     });
 
     // 3️⃣ Update skills
     // Example: delete old skills + add new ones
-    await prisma.skill.deleteMany({ where: { ownerId: session?.user.id } });
     await Promise.all(
         skills.map(title =>
             prisma.skill.create({
@@ -96,3 +99,6 @@ export async function UpdateProfileAction(formData: FormData) {
 
     return updatedUser;
 }
+
+
+
