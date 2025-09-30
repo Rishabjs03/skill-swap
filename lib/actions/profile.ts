@@ -27,9 +27,27 @@ export async function GetMyProfile() {
                 image: true,
                 bio: true,
                 createdAt: true,
-                skills: true,
-            },
+                skills: {
+                    select: {
+                        id: true,
+                        title: true,
+                        description: true,
+                        category: true,
+                        rate: true,
+                        createdAt: true,
+                        ownerId: true,
+                        owner: {
+                            select: {
+                                id: true,
+                                name: true,
+                                image: true,
+                            },
+                        },
+                    },
+                },
 
+
+            }
         })
         return result
     } catch (error) {

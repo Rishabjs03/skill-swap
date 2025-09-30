@@ -1,9 +1,11 @@
 "use client";
 
+import SkillCard from "@/app/components/SkillCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GetMyProfile } from "@/lib/actions/profile";
@@ -12,10 +14,19 @@ import { GetSessionUser } from "@/lib/actions/session";
 import { ArrowLeft, Calendar, Edit3 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
 interface Skills {
-  ownerId: string;
+  id: string;
   title: string;
+  description: string;
+  category: string | null;
+  rate: number;
+  ownerId: string;
+  createdAt: Date;
+  owner: {
+    id: string;
+    name: string | null;
+    image: string | null;
+  };
 }
 interface UserProps {
   id: string;
@@ -53,7 +64,7 @@ const ProfilePage = () => {
         {/* Back button */}
         <Button
           variant="ghost"
-          className="mb-6 text-gray-700 hover:text-black"
+          className="mb-6 text-gray-700 hover:text-white hover:bg-black transition-all"
           onClick={() => router.push("/")}
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
@@ -223,7 +234,7 @@ const ProfilePage = () => {
             <div className="lg:col-span-2">
               <Tabs
                 defaultValue="skills"
-                className="w-full border py-2 px-2 border-white/30 rounded-xl backdrop-blur-xl bg-white/10 shadow-xl  hover:scale-105 transition-all"
+                className="w-full border py-2 px-2 border-white/30 rounded-xl backdrop-blur-xl bg-white/10 shadow-xl  "
               >
                 <TabsList className="grid w-full grid-cols-2 bg-gray-100">
                   <TabsTrigger
@@ -239,18 +250,32 @@ const ProfilePage = () => {
                     Reviews
                   </TabsTrigger>
                 </TabsList>
-                <TabsContent
-                  value="skills"
-                  className="space-y-6 p-6 text-gray-800"
-                >
-                  <p>No skills added yet.</p>
-                </TabsContent>
-                <TabsContent
-                  value="reviews"
-                  className="space-y-6 p-6 text-gray-800"
-                >
-                  <p>No reviews yet.</p>
-                </TabsContent>
+
+                <ScrollArea className="w-full h-[500px] border-0 rounded-lg relative whitespace-nowrap">
+                  <TabsContent
+                    value="skills"
+                    className="space-y-6 p-6 text-gray-800"
+                  >
+                    {user?.skills && user?.skills.length > 0 ? (
+                      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-1 ">
+                        {user.skills.map((skill) => (
+                          <SkillCard key={skill.id} skill={skill} />
+                        ))}
+                      </div>
+                    ) : (
+                      <p>No skills added yet.</p>
+                    )}
+                  </TabsContent>
+                  <TabsContent
+                    value="reviews"
+                    className="space-y-6 p-6 text-gray-800 relative"
+                  >
+                    <p className="absolute top-50 left-30 md:top-50 md:left-90 ">
+                      No reviews yet.
+                    </p>
+                  </TabsContent>
+                  <ScrollBar orientation="vertical" />
+                </ScrollArea>
               </Tabs>
             </div>
           </div>

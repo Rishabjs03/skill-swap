@@ -111,7 +111,7 @@ const NewSkills = () => {
                     <SelectContent>
                       <SelectGroup className="bg-white rounded-lg">
                         <SelectLabel>Category</SelectLabel>
-                        <SelectItem value="programming">Programming</SelectItem>
+                        <SelectItem value="Programming">Programming</SelectItem>
                         <SelectItem value="Design">Design</SelectItem>
                         <SelectItem value="Marketing">Marketing</SelectItem>
                         <SelectItem value="Writing">Writing</SelectItem>

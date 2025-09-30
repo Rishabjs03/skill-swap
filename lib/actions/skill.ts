@@ -61,5 +61,8 @@ export async function getAllSkills(filters: { search?: string, category?: string
     return await prisma.skill.findMany({
         where,
         orderBy: { createdAt: "desc" },
+        include: {
+            owner: true
+        }
     });
 }
