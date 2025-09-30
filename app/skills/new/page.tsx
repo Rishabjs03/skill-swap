@@ -157,6 +157,7 @@ const NewSkills = () => {
                 </div>
                 <Button
                   type="submit"
+                  onClick={() => router.push("/skills")}
                   className="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-2 transition-all duration-300 shadow-md"
                 >
                   Create Skill
