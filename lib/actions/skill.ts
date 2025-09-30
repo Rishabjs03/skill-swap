@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers"
 import { auth } from "../auth"
-import { PrismaClient } from "../generated/prisma"
+import { Prisma, PrismaClient } from "../generated/prisma"
 
 
 const prisma = new PrismaClient()
@@ -38,4 +38,28 @@ export async function CreateSkill(formData: FormData) {
         console.error("error in create skill:", error)
         throw new Error("Failed to create Skill")
     }
+}
+
+export async function getAllSkills(filters: { search?: string, category?: string, rate?: string }) {
+    const where: Prisma.SkillWhereInput = {};
+    if (filters.search) {
+        where.title = {
+            contains: filters.search,
+            mode: "insensitive",
+        };
+    }
+    if (filters.category) {
+        where.category = filters.category;
+    }
+    if (filters.rate) {
+        const [min, max] = filters.rate.split("-").map(Number);
+        where.rate = {
+            gte: min,
+            lte: max || 99999,
+        };
+    }
+    return await prisma.skill.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+    });
 }

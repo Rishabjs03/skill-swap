@@ -21,7 +21,7 @@ export default function page() {
             Find tutors, designers, developers, and more in your area — book
             their skills instantly.
           </p>
-          <button className="text-white font-medium bg-black border-white/30 hover:bg-black/70 cursor-pointer px-3 py-2 md:px-4 md:py-3 flex gap-x-3 rounded-full">
+          <button className="text-white hover:scale-105 transition-all font-medium bg-black border-white/30 hover:bg-black/80 cursor-pointer px-3 py-2 md:px-4 md:py-3 flex gap-x-3 rounded-full">
             <ArrowRight />
             Get started
           </button>
