@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogOutIcon, MenuIcon, XIcon } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { SignOut } from "@/lib/actions/auth";
 
@@ -12,7 +12,7 @@ type session = typeof auth.$Infer.Session;
 const Navbar = ({ session }: { session: session | null }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const router = useRouter();
-
+  const pathname = usePathname();
   async function handleLogout() {
     await SignOut();
     router.push("/auth/sign-in");
@@ -22,7 +22,6 @@ const Navbar = ({ session }: { session: session | null }) => {
     router.push("/auth/sign-in");
   }
 
-  // Lock scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMobileOpen ? "hidden" : "auto";
   }, [isMobileOpen]);
@@ -48,28 +47,57 @@ const Navbar = ({ session }: { session: session | null }) => {
       </div>
 
       {/* Desktop Links */}
-      <ul className="hidden md:flex space-x-6 text-black font-medium">
-        {links.map((link) =>
-          link.name === "Teach" ? (
-            <li key={link.name}>
-              <div
-                onClick={() => router.push(link.href)}
-                className="hover:text-coral-500 transition-colors cursor-pointer"
-              >
-                {link.name}
-              </div>
-            </li>
-          ) : (
-            <li key={link.name}>
-              <Link
-                href={link.href}
-                className="hover:text-coral-500 transition-colors"
-              >
-                {link.name}
-              </Link>
-            </li>
-          )
+      <ul className="hidden md:flex  text-black font-medium">
+        <li>
+          <Button
+            variant="ghost"
+            onClick={() => router.push("/skills")}
+            className={`hover:text-coral-500 rounded-xs  transition-colors ${
+              pathname === "/skills"
+                ? "border-b border-gray-800 font-medium"
+                : ""
+            }`}
+          >
+            Marketplace
+          </Button>
+        </li>
+        {session && (
+          <li>
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/skills/new")}
+              className={`hover:text-coral-500 rounded-xs  transition-colors ${
+                pathname === "/skills/new" ? "border-b border-gray-800" : ""
+              }`}
+            >
+              Teach
+            </Button>
+          </li>
         )}
+        <li>
+          <Button
+            variant="ghost"
+            onClick={() => router.push("/bookings")}
+            className={`hover:text-coral-500 rounded-xs  transition-colors ${
+              pathname === "/bookings" ? "border-b border-gray-800" : ""
+            }`}
+          >
+            Bookings
+          </Button>
+        </li>
+        <li>
+          <Button
+            variant="ghost"
+            onClick={() => router.push(`/profile/${session?.user.id}`)}
+            className={`hover:text-coral-500 rounded-xs  transition-colors ${
+              pathname === `/profile/${session?.user.id}`
+                ? "border-b border-gray-800"
+                : ""
+            }`}
+          >
+            Profile
+          </Button>
+        </li>
       </ul>
 
       {/* Desktop Auth */}

@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GetSessionUser } from "@/lib/actions/session";
 import { getSkill } from "@/lib/actions/skill";
 import { ArrowLeft, Calendar, CheckCircle, Clock } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -28,6 +29,7 @@ interface skills {
 const SingleSkillPage = () => {
   const [showBookingForm, setshowBookingForm] = useState(false);
   const [skill, setSkill] = useState<skills | null>(null);
+
   const router = useRouter();
   const pathName = usePathname();
 

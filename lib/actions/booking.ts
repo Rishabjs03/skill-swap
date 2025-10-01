@@ -26,3 +26,25 @@ export async function CreateBooking(skillId: string, date: string) {
     throw new Error("Failed to book session");
   }
 }
+
+export async function getBookingsByUser() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) {
+    throw new Error("user not logged in")
+  }
+  return prisma.booking.findMany({
+    where: { userId: session?.user.id },
+    include: {
+      skill: {
+        include: { owner: true },
+      },
+    },
+    orderBy: { date: "desc" },
+  });
+}
+export async function updateBookingStatus(bookingId: string, status: string) {
+  return prisma.booking.update({
+    where: { id: bookingId },
+    data: { status },
+  });
+}

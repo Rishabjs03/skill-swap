@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CreateBooking } from "@/lib/actions/booking";
+import { GetSessionUser } from "@/lib/actions/session";
 import { setDate } from "date-fns";
 
 import { ChevronDownIcon, Clock, DollarSign } from "lucide-react";
@@ -29,6 +30,7 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     if (!date) {
       alert("Please select a date");
       return;

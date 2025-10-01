@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function page() {
   return (
-    <div className="w-full min-h-screen flex flex-col">
+    <div className="w-full min-h-screen  flex flex-col">
       {/* Hero Section */}
       <div className="relative w-full h-[70vh] flex flex-col items-center justify-center text-center">
         <Background />

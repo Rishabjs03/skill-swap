@@ -42,7 +42,6 @@ const SkillMarket = () => {
   const router = useRouter();
   const fetchSkills = async () => {
     const result = await getAllSkills({ search, category, rate });
-    console.log(result);
     setskills(result);
   };
   useEffect(() => {
@@ -213,6 +212,7 @@ const SkillMarket = () => {
                 setrate("");
                 setisBadge(false);
               }}
+              className="bg-black text-white"
             >
               Clear all filters
             </Button>

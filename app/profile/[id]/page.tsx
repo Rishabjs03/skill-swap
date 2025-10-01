@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GetMyProfile } from "@/lib/actions/profile";
 import { GetSessionUser } from "@/lib/actions/session";
@@ -42,13 +43,16 @@ const ProfilePage = () => {
   const [user, setuser] = useState<UserProps | null>(null);
   const [sessionUserId, setSessionUserId] = useState<string | null>(null);
   const [isloading, setisloading] = useState(true);
-
   const router = useRouter();
 
   useEffect(() => {
     async function loadProfile() {
       const user = await GetMyProfile();
       const sessionUser = await GetSessionUser();
+      if (!sessionUser) {
+        toast.error("Login to view your profile");
+        return;
+      }
       if (!user) {
         throw new Error("failed to load profile");
       }
@@ -58,6 +62,7 @@ const ProfilePage = () => {
     }
     loadProfile();
   }, []);
+
   return (
     <div className="min-h-[80vh] w-full flex justify-center items-center px-6">
       <div className="w-full max-w-7xl py-10">
@@ -144,7 +149,7 @@ const ProfilePage = () => {
             <div className="lg:col-span-1">
               <Card className="relative overflow-hidden border border-white/30 backdrop-blur-xl bg-white/10 shadow-2xl hover:scale-105 transition-all ">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-pink-300 to-white opacity-20" />
-                <CardHeader className="relative pb-4">
+                <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between relative pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
                       <Avatar className="h-20 w-20 ring-2 ring-white/40 shadow-xl">
@@ -178,12 +183,12 @@ const ProfilePage = () => {
                         variant="outline"
                         size="sm"
                         className="rounded-bl-xl rounded-tl-xl border border-white/40 bg-white
-             text-gray-800  hover:text-black
+             text-gray-800  hover:text-black flex-shrink-0 mt-4 md:mt-0
              shadow-md transition"
                         onClick={() => router.push("/profile/edit")}
                       >
                         <Edit3 className="h-4 w-4 mr-2" />
-                        Edit
+                        <p className="hidden md:block">Edit</p>
                       </Button>
                     )}
                   </div>

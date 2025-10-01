@@ -26,6 +26,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${libre.className} antialiased`}>
         <Navbar session={session} />
+
         {children}
       </body>
     </html>
