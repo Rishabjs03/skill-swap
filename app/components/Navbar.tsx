@@ -104,7 +104,7 @@ const Navbar = ({ session }: { session: session | null }) => {
         {/* Mobile Menu Overlay */}
         <div
           className={`fixed top-15 right-0 bg-white  rounded-xl z-[9999] w-xs transform transition-transform duration-300 flex flex-col items-center p-6 gap-4 ${
-            isMobileOpen ? "translate-x-0" : "translate-x-full"
+            isMobileOpen ? "opacity-100" : "opacity-0"
           }`}
         >
           {links.map((link) => (
