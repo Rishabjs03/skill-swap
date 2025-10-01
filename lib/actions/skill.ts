@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers"
 import { auth } from "../auth"
-import { Prisma, PrismaClient } from "../generated/prisma"
+import { PrismaClient } from "@prisma/client"
 
 
 const prisma = new PrismaClient()
@@ -41,7 +41,8 @@ export async function CreateSkill(formData: FormData) {
 }
 
 export async function getAllSkills(filters: { search?: string, category?: string, rate?: string }) {
-    const where: Prisma.SkillWhereInput = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: any = {};
     if (filters.search) {
         where.title = {
             contains: filters.search,

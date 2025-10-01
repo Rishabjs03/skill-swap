@@ -4,7 +4,7 @@ import { headers } from "next/headers"
 import { auth } from "../auth"
 import { revalidatePath } from "next/cache"
 
-import { PrismaClient } from "../generated/prisma"
+import { PrismaClient } from "@prisma/client"
 import { uploadToCloudinary } from "../cloudinary/cloudinary"
 
 const prisma = new PrismaClient()

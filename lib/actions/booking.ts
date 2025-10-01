@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { auth } from "../auth";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
