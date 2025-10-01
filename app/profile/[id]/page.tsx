@@ -49,10 +49,7 @@ const ProfilePage = () => {
     async function loadProfile() {
       const user = await GetMyProfile();
       const sessionUser = await GetSessionUser();
-      if (!sessionUser) {
-        toast.error("Login to view your profile");
-        return;
-      }
+
       if (!user) {
         throw new Error("failed to load profile");
       }
