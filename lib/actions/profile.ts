@@ -62,10 +62,29 @@ export async function getUserProfile(userId: string) {
         where: { id: userId },
         select: {
             id: true,
-            image: true,
             name: true,
+            email: true,
+            image: true,
             bio: true,
-            skills: true,
+            createdAt: true,
+            skills: {
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    category: true,
+                    rate: true,
+                    ownerId: true,
+                    createdAt: true,
+                    owner: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                        }
+                    }
+                }
+            }
         }
     })
 }
@@ -84,26 +103,25 @@ export async function UpdateProfileAction(formData: FormData) {
     const avatarFile = formData.get("avatar") as File | null;
 
     let imageUrl: string | null = null;
-    // 1️⃣ Handle avatar upload (optional)
+
     if (avatarFile) {
         const uploadResult = (await uploadToCloudinary(avatarFile))
         imageUrl = uploadResult.secure_url;
     }
 
 
-    // 2️⃣ Update user
+
     const updatedUser = await prisma.user.update({
         where: { id: session?.user.id },
         data: {
             name: name,
             email: email,
             bio: bio,
-            image: imageUrl || undefined, // agar null hai to ignore
+            image: imageUrl || undefined,
         },
     });
 
-    // 3️⃣ Update skills
-    // Example: delete old skills + add new ones
+
     await Promise.all(
         skills.map(title =>
             prisma.skill.create({
@@ -112,7 +130,7 @@ export async function UpdateProfileAction(formData: FormData) {
         )
     );
 
-    // 4️⃣ Optional: Revalidate profile page
+
     revalidatePath(`/profile/${session?.user.id}`);
 
     return updatedUser;

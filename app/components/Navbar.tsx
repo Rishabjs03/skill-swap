@@ -2,34 +2,44 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogOutIcon, MenuIcon, XIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { SignOut } from "@/lib/actions/auth";
 
 type session = typeof auth.$Infer.Session;
+
 const Navbar = ({ session }: { session: session | null }) => {
-  const [isMobileOpen, setisMobileOpen] = useState<boolean>(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const router = useRouter();
 
-  async function handlelogout() {
+  async function handleLogout() {
     await SignOut();
     router.push("/auth/sign-in");
   }
-  async function handlelogin() {
+
+  async function handleLogin() {
     router.push("/auth/sign-in");
   }
+
+  // Lock scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isMobileOpen ? "hidden" : "auto";
+  }, [isMobileOpen]);
+
+  const links = [
+    { name: "Marketplace", href: "/skills" },
+    { name: "Teach", href: "/skills/new" },
+    { name: "Bookings", href: "/bookings" },
+    {
+      name: "Profile",
+      href: session ? `/profile/${session.user.id}` : "/auth/sign-in",
+    },
+  ];
+
   return (
-    <nav
-      className="
-        w-full max-w-6xl mx-auto mt-6 px-6 py-3
-        flex items-center justify-between
-        bg-white/10 backdrop-blur-2xl
-        border border-white/20 rounded-2xl
-        shadow-lg
-      "
-    >
-      {/* Logo / Brand */}
+    <nav className="w-full max-w-6xl mx-auto mt-6 px-6 py-3 flex items-center justify-between bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-lg relative z-50">
+      {/* Logo */}
       <div
         className="text-xl font-bold text-black cursor-pointer"
         onClick={() => router.push("/")}
@@ -39,46 +49,34 @@ const Navbar = ({ session }: { session: session | null }) => {
 
       {/* Desktop Links */}
       <ul className="hidden md:flex space-x-6 text-black font-medium">
-        <li>
-          <Link
-            href="/skills"
-            className="hover:text-coral-500 transition-colors"
-          >
-            Marketplace
-          </Link>
-        </li>
-        <li>
-          <div
-            onClick={() => router.push(`/skills/new`)}
-            className="hover:text-coral-500 transition-colors cursor-pointer"
-          >
-            Teach
-          </div>
-        </li>
-        <li>
-          <Link
-            href="/bookings"
-            className="hover:text-coral-500 transition-colors"
-          >
-            Bookings
-          </Link>
-        </li>
-
-        <li>
-          <div
-            onClick={() => router.push(`/profile/${session?.user.id}`)}
-            className="hover:text-coral-500 transition-colors cursor-pointer"
-          >
-            Profile
-          </div>
-        </li>
+        {links.map((link) =>
+          link.name === "Teach" ? (
+            <li key={link.name}>
+              <div
+                onClick={() => router.push(link.href)}
+                className="hover:text-coral-500 transition-colors cursor-pointer"
+              >
+                {link.name}
+              </div>
+            </li>
+          ) : (
+            <li key={link.name}>
+              <Link
+                href={link.href}
+                className="hover:text-coral-500 transition-colors"
+              >
+                {link.name}
+              </Link>
+            </li>
+          )
+        )}
       </ul>
 
-      {/* Auth / Action Button */}
-      <div className=" items-center space-x-4 hidden md:flex">
+      {/* Desktop Auth */}
+      <div className="hidden md:flex items-center space-x-4">
         {!session ? (
           <Button
-            onClick={handlelogin}
+            onClick={handleLogin}
             variant="outline"
             className="text-white flex items-center bg-black border-white/30 hover:bg-black/70 cursor-pointer"
           >
@@ -86,55 +84,69 @@ const Navbar = ({ session }: { session: session | null }) => {
           </Button>
         ) : (
           <Button
-            onClick={handlelogout}
+            onClick={handleLogout}
             variant="outline"
-            className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer"
+            className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer flex items-center gap-2"
           >
             <LogOutIcon />
-            LogOut
+            Logout
           </Button>
         )}
       </div>
-      {/* mobile layout */}
-      <div className="md:hidden" onClick={() => setisMobileOpen(!isMobileOpen)}>
-        {isMobileOpen ? <XIcon /> : <MenuIcon />}
-      </div>
-      {isMobileOpen && (
-        <div className="fixed top-15 right-0 w-64 h-[200px] z-90 flex flex-col items-center bg-white/95 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl p-6 gap-4 transition-opacity from-5% to-100%">
-          <Link
-            href="/skills"
-            className="text-black font-medium hover:text-coral-500 transition-colors border-b border-gray-300 w-full text-center "
-            onClick={() => setisMobileOpen(false)}
-          >
-            Marketplace
-          </Link>
-          <Link
-            href="/bookings"
-            className="text-black font-medium hover:text-coral-500 transition-colors border-b border-gray-300 w-full text-center"
-            onClick={() => setisMobileOpen(false)}
-          >
-            My Bookings
-          </Link>
-          <Link
-            href="/profile"
-            className="text-black font-medium hover:text-coral-500 transition-colors border-b border-gray-300 w-full text-center"
-            onClick={() => setisMobileOpen(false)}
-          >
-            Profile
-          </Link>
 
-          <Button
-            variant="outline"
-            onClick={() => {
-              setisMobileOpen(false);
-              router.push("/auth/sign-in");
-            }}
-            className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer"
-          >
-            Login
-          </Button>
+      {/* Mobile Hamburger */}
+      <div
+        className="md:hidden z-50 cursor-pointer "
+        onClick={() => setIsMobileOpen(!isMobileOpen)}
+      >
+        {isMobileOpen ? <XIcon size={28} /> : <MenuIcon size={28} />}
+
+        {/* Mobile Menu Overlay */}
+        <div
+          className={`fixed top-15 right-0 bg-white  rounded-xl z-[9999] w-xs transform transition-transform duration-300 flex flex-col items-center p-6 gap-4 ${
+            isMobileOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {links.map((link) => (
+            <div
+              key={link.name}
+              onClick={() => {
+                setIsMobileOpen(false);
+                router.push(link.href);
+              }}
+              className="w-full text-center text-black font-medium hover:text-coral-500 transition-colors border-b border-gray-300 py-2 cursor-pointer"
+            >
+              {link.name}
+            </div>
+          ))}
+
+          {/* Mobile Auth Button */}
+          {!session ? (
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsMobileOpen(false);
+                handleLogin();
+              }}
+              className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer w-full mt-4"
+            >
+              Login
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsMobileOpen(false);
+                handleLogout();
+              }}
+              className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer w-full flex justify-center items-center gap-2 mt-4"
+            >
+              <LogOutIcon />
+              Logout
+            </Button>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
 };

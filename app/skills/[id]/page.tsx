@@ -112,7 +112,7 @@ const SingleSkillPage = () => {
                       <Button
                         variant="link"
                         onClick={() =>
-                          router.push(`/profile/${skill?.owner.id}`)
+                          router.push(`/skills/profile/${skill?.owner.id}`)
                         }
                       >
                         <h3 className="text-xl font-semibold">

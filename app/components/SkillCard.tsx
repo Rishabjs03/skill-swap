@@ -72,7 +72,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill }) => {
           <div className="flex-1 min-w-0 ">
             <Button
               variant="link"
-              onClick={() => router.push(`/profile/${skill.owner.id}`)}
+              onClick={() => router.push(`/skills/profile/${skill.owner.id}`)}
             >
               <p className="text-sm font-medium ">{skill.owner.name}</p>
             </Button>
