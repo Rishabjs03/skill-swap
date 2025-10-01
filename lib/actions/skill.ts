@@ -66,3 +66,20 @@ export async function getAllSkills(filters: { search?: string, category?: string
         }
     });
 }
+
+export async function getSkill(id: string) {
+    const skill = await prisma.skill.findUnique({
+        where: { id },
+        include: {
+            owner: {
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                    bio: true
+                },
+            },
+        },
+    });
+    return skill;
+}

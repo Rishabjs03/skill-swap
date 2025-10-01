@@ -33,7 +33,7 @@ interface SkillCardProps {
 const SkillCard: React.FC<SkillCardProps> = ({ skill }) => {
   const router = useRouter();
   return (
-    <Card className="group overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 bg-gradient-subtle border-0">
+    <Card className="group overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 bg-gradient-subtle border-gray-200 border-2">
       <CardHeader className="pb-1">
         <div className="flex items-start justify-between">
           <Badge
@@ -102,11 +102,15 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill }) => {
         <div className="flex gap-2 w-full">
           <Button
             variant="outline"
+            onClick={() => router.push(`/skills/${skill.id}`)}
             className="flex-1 hover:scale-103 transition-all"
           >
             View Details
           </Button>
-          <Button className="flex-1 bg-black text-white hover:opacity-90 hover:scale-103 transition-all">
+          <Button
+            onClick={() => router.push(`/skills/${skill.id}`)}
+            className="flex-1 bg-black text-white hover:opacity-90 hover:scale-103 transition-all"
+          >
             Book Now
           </Button>
         </div>

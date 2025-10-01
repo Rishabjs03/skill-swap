@@ -234,7 +234,7 @@ const ProfilePage = () => {
             <div className="lg:col-span-2">
               <Tabs
                 defaultValue="skills"
-                className="w-full border py-2 px-2 border-white/30 rounded-xl backdrop-blur-xl bg-white/10 shadow-xl  "
+                className="w-full  py-2 px-2 border-2 border-gray-200 rounded-xl  bg-white/10 shadow-xl  "
               >
                 <TabsList className="grid w-full grid-cols-2 bg-gray-100">
                   <TabsTrigger
@@ -263,7 +263,9 @@ const ProfilePage = () => {
                         ))}
                       </div>
                     ) : (
-                      <p>No skills added yet.</p>
+                      <p className="absolute top-50 left-30 md:top-50 md:left-90 ">
+                        No skills added yet.
+                      </p>
                     )}
                   </TabsContent>
                   <TabsContent

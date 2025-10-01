@@ -122,14 +122,17 @@ const Navbar = ({ session }: { session: session | null }) => {
           >
             Profile
           </Link>
-          <Link href="/auth/sign-in" onClick={() => setisMobileOpen(false)}>
-            <Button
-              variant="outline"
-              className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer"
-            >
-              Login
-            </Button>
-          </Link>
+
+          <Button
+            variant="outline"
+            onClick={() => {
+              setisMobileOpen(false);
+              router.push("/auth/sign-in");
+            }}
+            className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer"
+          >
+            Login
+          </Button>
         </div>
       )}
     </nav>

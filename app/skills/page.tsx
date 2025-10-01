@@ -79,7 +79,7 @@ const SkillMarket = () => {
         </div>
 
         {/* Search + Filters */}
-        <div className="bg-white/60 w-full shadow-xl rounded-2xl p-4 md:p-6 mb-8">
+        <div className="bg-white/60 w-full  rounded-xl md:rounded-full p-4 md:p-6 mb-8 border-gray-200 border-2">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Input */}
             <div className="relative flex-1">
@@ -88,17 +88,17 @@ const SkillMarket = () => {
                 value={search}
                 onChange={(e) => setsearch(e.target.value)}
                 placeholder="Search skills, mentors or topics..."
-                className="pl-10 bg-white border rounded-xl shadow-lg"
+                className="pl-10 bg-white border-gray-200 border-2 rounded-xl shadow-md"
               />
             </div>
 
             {/* Category Select */}
             <Select value={category} onValueChange={(v) => setcategory(v)}>
-              <SelectTrigger className="w-full md:w-48 bg-white rounded-xl shadow-lg border text-black">
+              <SelectTrigger className="w-full md:w-48 bg-white rounded-xl shadow-md border-gray-200 border-2 text-black">
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectGroup className="bg-white shadow-xl">
+              <SelectContent className=" border-gray-200 border-2">
+                <SelectGroup className="bg-white ">
                   <SelectLabel>Category</SelectLabel>
                   <SelectItem value="Programming">Programming</SelectItem>
                   <SelectItem value="Design">Design</SelectItem>
@@ -111,10 +111,10 @@ const SkillMarket = () => {
 
             {/* Price Select */}
             <Select value={rate} onValueChange={(v) => setrate(v)}>
-              <SelectTrigger className="w-full md:w-40 bg-white rounded-xl shadow-lg border">
+              <SelectTrigger className="w-full md:w-40 bg-white rounded-xl shadow-md border-gray-200 border-2">
                 <SelectValue placeholder="All prices" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className=" border-gray-200 border-2">
                 <SelectGroup className="bg-white ">
                   <SelectLabel>Price Range</SelectLabel>
                   <SelectItem value="0-50">$0 - $50</SelectItem>

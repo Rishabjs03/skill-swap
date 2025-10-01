@@ -52,7 +52,7 @@ model Booking {
   skillId   String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  status    String   @default("pending") // pending, accepted, completed
+  status    String   @default("pending")
   date      DateTime
   createdAt DateTime @default(now())
 
