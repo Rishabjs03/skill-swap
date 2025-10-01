@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { Analytics } from "@vercel/analytics/next";
 
 const libre = Libre_Baskerville({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default async function RootLayout({
         <Navbar session={session} />
 
         {children}
+        <Analytics />
       </body>
     </html>
   );
