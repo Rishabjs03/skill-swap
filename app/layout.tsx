@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { AuthProvider } from "@/lib/context/auth-context";
 import Background from "./components/Background";
+import { Toaster } from "@/components/ui/sonner";
 
 const libre = Libre_Baskerville({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default async function RootLayout({
         <AuthProvider user={session?.user || null}>
           <Navbar session={session} />
           <main className="relative z-10">{children}</main>
+          <Toaster richColors closeButton position="top-right" />
           <Analytics />
         </AuthProvider>
       </body>

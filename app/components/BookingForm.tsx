@@ -10,9 +10,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CreateBooking } from "@/lib/actions/booking";
-import { GetSessionUser } from "@/lib/actions/session";
+
 import { useAuth } from "@/lib/context/auth-context";
-import { setDate } from "date-fns";
+
+import { toast } from "sonner";
 
 import { ChevronDownIcon, Clock, DollarSign } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -45,7 +46,14 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
     }
     setisloading(true);
     try {
-      await CreateBooking(skill?.id, date?.toISOString());
+      const bookingcreated = await CreateBooking(
+        skill?.id,
+        date?.toISOString()
+      );
+      if (!bookingcreated) {
+        toast.error("Failed to book!");
+      }
+      toast.success("Booked your session!");
     } catch (error) {
       console.error(error);
       alert("Booking failed");

@@ -1,12 +1,12 @@
 "use client";
-import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { LogOutIcon, MenuIcon, XIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { SignOut } from "@/lib/actions/auth";
-import { useAuth } from "@/lib/context/auth-context";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,9 +24,10 @@ const Navbar = ({ session }: { session: session | null }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useAuth();
+
   async function handleLogout() {
     await SignOut();
+    toast.success("Logged out successfully!");
     router.push("/auth/sign-in");
   }
 

@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Background from "@/app/components/Background";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { SignUpUser } from "@/lib/actions/auth";
 
@@ -27,10 +27,14 @@ const SignUp = () => {
     try {
       const result = await SignUpUser(email, password, name);
       if (!result.user) {
+        toast.error("Failed to create an account!");
         console.log("Failed to create an account");
+        return;
       }
+      toast.success("Created an account!");
       router.push("/");
     } catch (error) {
+      toast.error("Something went wrong!");
       console.error("error in signup:", error);
     }
     setemail("");

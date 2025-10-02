@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Background from "@/app/components/Background";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { SignInUser } from "@/lib/actions/auth";
 
@@ -22,21 +22,25 @@ const SignIn = () => {
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     e.preventDefault();
     setisloading(true);
     try {
       const result = await SignInUser(email, password);
       if (!result.user) {
-        console.log("Invalid email or password");
+        toast.error("Invalid email or password");
+        setisloading(false);
+        return;
       }
+      toast.success("Logged in successfully!");
       router.push("/");
     } catch (error) {
+      toast.error("Something went wrong. Please try again.");
       console.error("error in signin:", error);
+    } finally {
+      setemail("");
+      setpassword("");
+      setisloading(false);
     }
-    setemail("");
-    setpassword("");
-    setisloading(false);
   };
   return (
     <div className="relative z-10 flex justify-center items-center h-[70vh] w-full">

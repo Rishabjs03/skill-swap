@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CreateSkill } from "@/lib/actions/skill";
 import { ArrowLeft, PlusCircleIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import React, { useState } from "react";
 
@@ -24,12 +25,12 @@ const NewSkills = () => {
   const [category, setcategory] = useState("");
   const [Rate, setRate] = useState(0);
   const [description, setdescription] = useState("");
-  const [isloading, setisloading] = useState<boolean>(true);
+  const [isloading, setisloading] = useState<boolean>(false);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+    setisloading(true);
     const formData = new FormData();
     formData.append("title", Title);
     formData.append("category", category);
@@ -38,12 +39,16 @@ const NewSkills = () => {
     try {
       const result = await CreateSkill(formData);
       if (!result) {
+        toast.error("Failed to create skill!");
         throw new Error("failed to create skill");
+        return;
       }
+      toast.success("Listed your skill!");
       setTitle("");
       setdescription("");
       setcategory("");
       setRate(0);
+      setisloading(false);
     } catch (error) {
       console.error("error in edit skill page:", error);
     }
@@ -157,10 +162,11 @@ const NewSkills = () => {
                 </div>
                 <Button
                   type="submit"
+                  disabled={isloading}
                   onClick={() => router.push("/skills")}
                   className="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-2 transition-all duration-300 shadow-md"
                 >
-                  Create Skill
+                  {isloading ? <p>CreateBooking...</p> : <p>Create Skill</p>}
                 </Button>
               </form>
             </CardContent>
