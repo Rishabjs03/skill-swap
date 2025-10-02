@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
+import { AuthProvider } from "@/lib/context/auth-context";
+import Background from "./components/Background";
 
 const libre = Libre_Baskerville({
   subsets: ["latin"],
@@ -26,10 +28,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${libre.className} antialiased`}>
-        <Navbar session={session} />
-
-        {children}
-        <Analytics />
+        <Background />
+        <AuthProvider user={session?.user || null}>
+          <Navbar session={session} />
+          <main className="relative z-10">{children}</main>
+          <Analytics />
+        </AuthProvider>
       </body>
     </html>
   );

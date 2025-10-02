@@ -8,6 +8,7 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
+  ArrowUpRight,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -15,6 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton"; // <-- import Skeleton
 import { getBookingsByUser, updateBookingStatus } from "@/lib/actions/booking";
+import { useAuth } from "@/lib/context/auth-context";
+import { useRouter } from "next/navigation";
 
 interface Booking {
   id: string;
@@ -31,6 +34,8 @@ interface Booking {
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const router = useRouter();
 
   // Fetch bookings from DB
   useEffect(() => {
@@ -62,9 +67,33 @@ export default function BookingsPage() {
   const completed = bookings.filter((b) => b.status === "completed");
   const cancelled = bookings.filter((b) => b.status === "cancelled");
 
+  if (!user) {
+    return (
+      <div className="w-full min-h-[80vh] z-99 flex items-center justify-center px-6">
+        <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200 p-8 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            You’re not logged in
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Please sign in to view your bookings
+          </p>
+
+          <Button
+            variant="default"
+            className="w-full py-5 text-lg  text-white bg-black rounded-xl hover:bg-gray-900 transition-all flex items-center justify-center gap-2"
+            onClick={() => router.push("/auth/sign-in")}
+          >
+            <ArrowUpRight className="h-5 w-5" />
+            Login to Continue
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading)
     return (
-      <div className="w-full min-h-screen">
+      <div className="w-full z-99 min-h-screen">
         <div className="flex items-center justify-center space-x-4 mt-10 px-10">
           <Skeleton className="w-14 h-14 rounded-full bg-gray-200" />
           <div className="flex-1 space-y-2">
@@ -85,7 +114,7 @@ export default function BookingsPage() {
     );
 
   return (
-    <div className="container mx-auto py-8 px-4 md:px-0">
+    <div className="container z-99 mx-auto py-8 px-4 md:px-0">
       <div className="mb-6">
         <h1 className="text-3xl font-bold">My Bookings</h1>
       </div>
@@ -166,7 +195,7 @@ function BookingCard({ booking }: { booking: Booking }) {
   };
 
   return (
-    <Card className="mb-4 hover:shadow-xl transition-shadow rounded-xl border-2 border-gray-200 shadow-lg">
+    <Card className="mb-4 hover:shadow-xl transition-shadow rounded-xl border-2 bg-white z-99 border-gray-200 shadow-lg">
       <CardHeader className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <Avatar className="w-14 h-14">
@@ -179,7 +208,9 @@ function BookingCard({ booking }: { booking: Booking }) {
               with {booking.skill.owner.name}
             </p>
             {booking.skill.category && (
-              <Badge className="mt-1">{booking.skill.category}</Badge>
+              <Badge className="mt-1 bg-black text-white rounded-xl">
+                {booking.skill.category}
+              </Badge>
             )}
           </div>
         </div>

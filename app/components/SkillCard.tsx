@@ -33,7 +33,7 @@ interface SkillCardProps {
 const SkillCard: React.FC<SkillCardProps> = ({ skill }) => {
   const router = useRouter();
   return (
-    <Card className="group overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 bg-gradient-subtle border-gray-200 border-2">
+    <Card className="group overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 bg-white border-gray-200 border-2">
       <CardHeader className="pb-1">
         <div className="flex items-start justify-between">
           <Badge

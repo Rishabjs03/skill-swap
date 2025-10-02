@@ -78,7 +78,7 @@ const SkillMarket = () => {
         </div>
 
         {/* Search + Filters */}
-        <div className="bg-white/60 w-full  rounded-xl md:rounded-full p-4 md:p-6 mb-8 border-gray-200 border-2">
+        <div className="bg-white w-full  rounded-xl md:rounded-full p-4 md:p-6 mb-8 border-gray-200 border-2">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Input */}
             <div className="relative flex-1">

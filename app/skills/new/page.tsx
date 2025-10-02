@@ -67,8 +67,8 @@ const NewSkills = () => {
           </p>
         </div>
         <div className="grid">
-          <Card className="relative overflow-hidden border border-white/30 backdrop-blur-xl bg-white/10 shadow-2xl hover:scale-105 transition-all">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-pink-400 to-white opacity-20" />
+          <Card className="relative overflow-hidden border border-white/30 backdrop-blur-xl bg-white shadow-2xl hover:scale-101 transition-all">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-500 to-white opacity-20" />
             <CardHeader className="relative ">
               <div className="flex items-center justify-start flex-col gap-y-2 ">
                 <h1 className=" flex items-center justify-start font-medium text-3xl cursor-pointer gap-2 ">

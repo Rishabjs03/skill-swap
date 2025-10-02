@@ -11,8 +11,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GetMyProfile } from "@/lib/actions/profile";
 import { GetSessionUser } from "@/lib/actions/session";
+import { useAuth } from "@/lib/context/auth-context";
 
-import { ArrowLeft, Calendar, Edit3 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Calendar, Edit3 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 interface Skills {
@@ -40,28 +41,52 @@ interface UserProps {
 }
 
 const ProfilePage = () => {
-  const [user, setuser] = useState<UserProps | null>(null);
+  const [User, setuser] = useState<UserProps | null>(null);
   const [sessionUserId, setSessionUserId] = useState<string | null>(null);
   const [isloading, setisloading] = useState(true);
   const router = useRouter();
-
+  const { user } = useAuth();
   useEffect(() => {
     async function loadProfile() {
-      const user = await GetMyProfile();
+      const User = await GetMyProfile();
       const sessionUser = await GetSessionUser();
 
-      if (!user) {
+      if (!User) {
         throw new Error("failed to load profile");
       }
-      setuser(user);
+      setuser(User);
       setSessionUserId(sessionUser?.id || null);
       setisloading(false);
     }
     loadProfile();
   }, []);
 
+  if (!user) {
+    return (
+      <div className="w-full min-h-[80vh] z-10 flex items-center justify-center px-6">
+        <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200 p-8 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            You’re not logged in
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Please sign in to view and manage your profile.
+          </p>
+
+          <Button
+            variant="default"
+            className="w-full py-5 text-lg  text-white bg-black rounded-xl hover:bg-gray-900 transition-all flex items-center justify-center gap-2"
+            onClick={() => router.push("/auth/sign-in")}
+          >
+            <ArrowUpRight className="h-5 w-5" />
+            Login to Continue
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-[80vh] w-full flex justify-center items-center px-6">
+    <div className="min-h-[80vh] z-99 w-full flex justify-center items-center px-6">
       <div className="w-full max-w-7xl py-10">
         {/* Back button */}
         <Button
@@ -78,7 +103,7 @@ const ProfilePage = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Side Profile Card Skeleton */}
             <div className="lg:col-span-1">
-              <Card className="relative overflow-hidden border border-white/30 backdrop-blur-xl bg-white/10 shadow-2xl">
+              <Card className="relative overflow-hidden border border-white/30 backdrop-blur-xl bg-white shadow-2xl">
                 <CardHeader className="relative pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
@@ -124,7 +149,7 @@ const ProfilePage = () => {
 
             {/* Right Side Tabs Skeleton */}
             <div className="lg:col-span-2">
-              <Card className="w-full border py-2 px-2 border-white/30 rounded-xl backdrop-blur-xl bg-white/10 shadow-xl">
+              <Card className="w-full border py-2 px-2 border-white/30 rounded-xl backdrop-blur-xl bg-white shadow-xl">
                 <CardHeader>
                   <Skeleton className="h-8 w-24 mb-4 bg-gray-300" />
                   <div className="flex gap-4">
@@ -144,14 +169,14 @@ const ProfilePage = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Side Profile Card */}
             <div className="lg:col-span-1">
-              <Card className="relative overflow-hidden border border-white/30 backdrop-blur-xl bg-white/10 shadow-2xl hover:scale-105 transition-all ">
+              <Card className="relative overflow-hidden border border-white/30 backdrop-blur-xl bg-white shadow-2xl hover:scale-105 transition-all ">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-pink-300 to-white opacity-20" />
                 <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between relative pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
                       <Avatar className="h-20 w-20 ring-2 ring-white/40 shadow-xl">
                         <AvatarImage
-                          src={user?.image || "/default.jpg"}
+                          src={User?.image || "/default.jpg"}
                           alt="user"
                         />
                         <AvatarFallback className="text-lg font-semibold">
@@ -160,22 +185,22 @@ const ProfilePage = () => {
                       </Avatar>
                       <div className="space-y-1">
                         <h2 className="text-xl font-semibold text-gray-900">
-                          {user?.name}
+                          {User?.name}
                         </h2>
-                        <p className="text-sm text-gray-600">{user?.email}</p>
+                        <p className="text-sm text-gray-600">{User?.email}</p>
                         <div className="flex flex-wrap gap-2 pt-2">
                           <Badge
                             variant="outline"
                             className="border-gray-400  rounded-full text-gray-700"
                           >
                             <span className="font-semibold py-1 px-1">
-                              {user?.skills.length || 0} Skills
+                              {User?.skills.length || 0} Skills
                             </span>
                           </Badge>
                         </div>
                       </div>
                     </div>
-                    {user && sessionUserId === user.id && (
+                    {User && sessionUserId === User.id && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -194,7 +219,7 @@ const ProfilePage = () => {
                   <div>
                     <h3 className="font-semibold mb-1 text-gray-900">About</h3>
                     <p className="text-sm leading-relaxed text-gray-700">
-                      {user?.bio || "No bio listed"}
+                      {User?.bio || "No bio listed"}
                     </p>
                   </div>
 
@@ -203,7 +228,7 @@ const ProfilePage = () => {
                     <span>
                       Member since{" "}
                       {new Date(
-                        user?.createdAt ?? Date.now()
+                        User?.createdAt ?? Date.now()
                       ).toLocaleDateString("en-US", {
                         month: "long",
                         year: "numeric",
@@ -215,7 +240,7 @@ const ProfilePage = () => {
                   <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-300">
                     <div className="text-center">
                       <div className="text-2xl font-bold text-purple-600">
-                        {user?.skills.length}
+                        {User?.skills.length}
                       </div>
                       <div className="text-xs text-gray-600">Skills</div>
                     </div>
@@ -236,9 +261,9 @@ const ProfilePage = () => {
             <div className="lg:col-span-2">
               <Tabs
                 defaultValue="skills"
-                className="w-full  py-2 px-2 border-2 border-gray-200 rounded-xl  bg-white/10 shadow-xl  "
+                className="w-full  py-2 px-2 border-2 border-gray-200 rounded-xl  bg-white shadow-xl  "
               >
-                <TabsList className="grid w-full grid-cols-2 bg-gray-100">
+                <TabsList className="grid w-full grid-cols-2 bg-gray-200">
                   <TabsTrigger
                     value="skills"
                     className="data-[state=active]:bg-white"
@@ -258,9 +283,9 @@ const ProfilePage = () => {
                     value="skills"
                     className="space-y-6 p-6 text-gray-800"
                   >
-                    {user?.skills && user?.skills.length > 0 ? (
+                    {User?.skills && User?.skills.length > 0 ? (
                       <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-1 ">
-                        {user.skills.map((skill) => (
+                        {User.skills.map((skill) => (
                           <SkillCard key={skill.id} skill={skill} />
                         ))}
                       </div>

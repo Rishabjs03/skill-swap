@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/popover";
 import { CreateBooking } from "@/lib/actions/booking";
 import { GetSessionUser } from "@/lib/actions/session";
+import { useAuth } from "@/lib/context/auth-context";
 import { setDate } from "date-fns";
 
 import { ChevronDownIcon, Clock, DollarSign } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface skills {
@@ -26,10 +28,16 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
   const [open, setopen] = useState(false);
   const [date, setdate] = useState<Date | undefined>(undefined);
   const [isloading, setisloading] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
   if (!skill) return null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!user) {
+      router.push("/auth/sign-in");
+      return;
+    }
 
     if (!date) {
       alert("Please select a date");

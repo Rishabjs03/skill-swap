@@ -14,12 +14,12 @@ export async function GetMyProfile() {
     const session = await auth.api.getSession({ headers: await headers() })
 
     if (!session) {
-        throw new Error("User not authenticated")
+        console.error("user not authenticated")
     }
 
     try {
         const result = await prisma.user.findUnique({
-            where: { email: session.user.email },
+            where: { email: session?.user.email },
             select: {
                 id: true,
                 name: true,

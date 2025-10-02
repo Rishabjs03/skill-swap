@@ -39,10 +39,8 @@ const SignIn = () => {
     setisloading(false);
   };
   return (
-    <div className="relative flex justify-center items-center h-[70vh] w-full">
-      <Background />
-
-      <Card className="w-full max-w-sm backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl relative z-10">
+    <div className="relative z-10 flex justify-center items-center h-[70vh] w-full">
+      <Card className="w-full max-w-sm  backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl relative z-10">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-2xl font-semibold text-black">
             Welcome Back!

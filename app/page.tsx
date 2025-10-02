@@ -5,8 +5,21 @@ import Background from "./components/Background";
 import { ArrowRight, Github, Twitter } from "lucide-react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/context/auth-context";
 
-export default function page() {
+export default function Homepage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  function handleStart() {
+    if (!user) {
+      router.push("/auth/sign-in");
+      return;
+    } else if (user) {
+      router.push("/skills");
+    }
+  }
   return (
     <div className="w-full min-h-screen  flex flex-col">
       {/* Hero Section */}
@@ -21,7 +34,10 @@ export default function page() {
             Find tutors, designers, developers, and more in your area — book
             their skills instantly.
           </p>
-          <button className="text-white hover:scale-105 transition-all font-medium bg-black border-white/30 hover:bg-black/80 cursor-pointer px-3 py-2 md:px-4 md:py-3 flex gap-x-3 rounded-full">
+          <button
+            onClick={handleStart}
+            className="text-white hover:scale-105 transition-all font-medium bg-black border-white/30 hover:bg-black/80 cursor-pointer px-3 py-2 md:px-4 md:py-3 flex gap-x-3 rounded-full"
+          >
             <ArrowRight />
             Get started
           </button>

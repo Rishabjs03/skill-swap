@@ -6,6 +6,17 @@ import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { SignOut } from "@/lib/actions/auth";
+import { useAuth } from "@/lib/context/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type session = typeof auth.$Infer.Session;
 
@@ -13,6 +24,7 @@ const Navbar = ({ session }: { session: session | null }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { user } = useAuth();
   async function handleLogout() {
     await SignOut();
     router.push("/auth/sign-in");
@@ -52,7 +64,7 @@ const Navbar = ({ session }: { session: session | null }) => {
           <Button
             variant="ghost"
             onClick={() => router.push("/skills")}
-            className={`hover:text-coral-500 rounded-xs  transition-colors ${
+            className={`hover:text-coral-500 rounded-xs text-md transition-colors ${
               pathname === "/skills"
                 ? "border-b border-gray-800 font-medium"
                 : ""
@@ -61,12 +73,12 @@ const Navbar = ({ session }: { session: session | null }) => {
             Marketplace
           </Button>
         </li>
-        {session && (
+        {user && (
           <li>
             <Button
               variant="ghost"
               onClick={() => router.push("/skills/new")}
-              className={`hover:text-coral-500 rounded-xs  transition-colors ${
+              className={`hover:text-coral-500 rounded-xs text-md transition-colors ${
                 pathname === "/skills/new" ? "border-b border-gray-800" : ""
               }`}
             >
@@ -78,24 +90,11 @@ const Navbar = ({ session }: { session: session | null }) => {
           <Button
             variant="ghost"
             onClick={() => router.push("/bookings")}
-            className={`hover:text-coral-500 rounded-xs  transition-colors ${
+            className={`hover:text-coral-500 rounded-xs text-md transition-colors ${
               pathname === "/bookings" ? "border-b border-gray-800" : ""
             }`}
           >
             Bookings
-          </Button>
-        </li>
-        <li>
-          <Button
-            variant="ghost"
-            onClick={() => router.push(`/profile/${session?.user.id}`)}
-            className={`hover:text-coral-500 rounded-xs  transition-colors ${
-              pathname === `/profile/${session?.user.id}`
-                ? "border-b border-gray-800"
-                : ""
-            }`}
-          >
-            Profile
           </Button>
         </li>
       </ul>
@@ -111,14 +110,46 @@ const Navbar = ({ session }: { session: session | null }) => {
             Login
           </Button>
         ) : (
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer flex items-center gap-2"
-          >
-            <LogOutIcon />
-            Logout
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-full border-0">
+              <Avatar className="w-9 h-9">
+                <AvatarImage src={session?.user.image || "/default.jpg"} />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-30 flex flex-col items-center justify-center rounded-xl border border-gray-200 bg-white shadow-lg p-2 ">
+              <DropdownMenuLabel className="text-sm font-medium text-gray-700">
+                My Account
+              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  onClick={() => router.push(`/profile/${session?.user.id}`)}
+                >
+                  Profile
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer flex items-center gap-2"
+                >
+                  <LogOutIcon />
+                  Logout
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          // <Button
+          //   onClick={handleLogout}
+          //   variant="outline"
+          //   className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer flex items-center gap-2"
+          // >
+          //   <LogOutIcon />
+          //   Logout
+          // </Button>
         )}
       </div>
 
