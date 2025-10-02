@@ -73,7 +73,7 @@ const Navbar = ({ session }: { session: session | null }) => {
             Marketplace
           </Button>
         </li>
-        {user && (
+        {session && (
           <li>
             <Button
               variant="ghost"
