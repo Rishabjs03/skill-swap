@@ -57,7 +57,6 @@ const Navbar = ({ session }: { session: session | null }) => {
 
   const links = [
     { name: "Marketplace", href: "/skills" },
-    { name: "Teach", href: "/skills/new" },
     { name: "Bookings", href: "/bookings" },
     {
       name: "Profile",

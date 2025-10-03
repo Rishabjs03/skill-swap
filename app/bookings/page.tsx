@@ -120,31 +120,31 @@ export default function BookingsPage() {
       </div>
 
       <Tabs defaultValue="upcoming">
-        <TabsList className="grid grid-cols-3 gap-2 mb-6">
+        <TabsList className="grid grid-cols-3 mt-5  gap-2 mb-6">
           <TabsTrigger
             value="upcoming"
-            className="flex justify-between items-center px-3 border-gray-200 shadow-lg"
+            className="flex justify-between items-center px-3 max-sm:text-xs border-gray-200 shadow-lg"
           >
             Upcoming{" "}
-            <span className="ml-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">
+            <span className="ml-1 sm:ml-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">
               {upcoming.length}
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="completed"
-            className="flex justify-between items-center px-3 border-gray-200 shadow-lg"
+            className="flex justify-between items-center max-sm:text-xs px-3 py-2 border-gray-200 shadow-lg"
           >
             Completed{" "}
-            <span className="ml-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+            <span className="ml-1 sm:ml-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
               {completed.length}
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="cancelled"
-            className="flex justify-between items-center px-3 border-gray-200 shadow-lg"
+            className="flex justify-between items-center  max-sm:text-xs px-3 py-2 border-gray-200 shadow-lg"
           >
             Cancelled{" "}
-            <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+            <span className="ml-1 sm:ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
               {cancelled.length}
             </span>
           </TabsTrigger>
