@@ -13,19 +13,18 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/lib/context/auth-context";
+
 import { GetUserRole } from "@/lib/actions/profile";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 
 type session = typeof auth.$Infer.Session;
 
 const Navbar = ({ session }: { session: session | null }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [role, setrole] = useState("");
-  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -91,19 +90,6 @@ const Navbar = ({ session }: { session: session | null }) => {
             Marketplace
           </Button>
         </li>
-        {role === "Teacher" && (
-          <li>
-            <Button
-              variant="ghost"
-              onClick={() => router.push("/skills/new")}
-              className={`hover:text-coral-500 rounded-xs text-md transition-colors ${
-                pathname === "/skills/new" ? "border-b border-gray-800" : ""
-              }`}
-            >
-              Teach
-            </Button>
-          </li>
-        )}
         <li>
           <Button
             variant="ghost"
@@ -135,23 +121,45 @@ const Navbar = ({ session }: { session: session | null }) => {
                 <AvatarFallback>U</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-30 flex flex-col items-center justify-center rounded-xl border border-gray-200 bg-white shadow-lg p-2 ">
-              <DropdownMenuLabel className="text-sm font-medium text-gray-700">
+
+            <DropdownMenuContent className="w-44 rounded-xl border border-gray-200 bg-white shadow-lg py-2">
+              <DropdownMenuLabel className="text-sm font-semibold text-gray-700 px-4 py-1">
                 My Account
               </DropdownMenuLabel>
+
               <DropdownMenuGroup>
                 <DropdownMenuItem
+                  className="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
                   onClick={() => router.push(`/profile/${session?.user.id}`)}
                 >
                   Profile
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
+
+              <hr className="my-1 border-gray-300" />
+
+              <DropdownMenuLabel className="text-sm font-semibold text-gray-700 px-4 py-1">
+                Teacher Options
+              </DropdownMenuLabel>
+
+              <DropdownMenuGroup>
+                {role === "Teacher" && (
+                  <DropdownMenuItem
+                    className="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    onClick={() => router.push("/skills/new")}
+                  >
+                    Teach
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuGroup>
+
+              <hr className="my-1 border-gray-300" />
+
+              <DropdownMenuItem asChild>
                 <Button
                   onClick={handleLogout}
                   variant="outline"
-                  className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer flex items-center gap-2"
+                  className="w-full justify-start text-black border border-gray-300 hover:bg-gray-100 gap-2 px-4 py-2 rounded-lg"
                 >
                   <LogOutIcon />
                   Logout
@@ -159,70 +167,94 @@ const Navbar = ({ session }: { session: session | null }) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          // <Button
-          //   onClick={handleLogout}
-          //   variant="outline"
-          //   className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer flex items-center gap-2"
-          // >
-          //   <LogOutIcon />
-          //   Logout
-          // </Button>
         )}
       </div>
 
       {/* Mobile Hamburger */}
-      <div
-        className="md:hidden z-50 cursor-pointer "
-        onClick={() => setIsMobileOpen(!isMobileOpen)}
-      >
-        {isMobileOpen ? <XIcon size={28} /> : <MenuIcon size={28} />}
+      <div className="md:hidden z-50 cursor-pointer ">
+        <DropdownMenu open={isMobileOpen} onOpenChange={setIsMobileOpen}>
+          <DropdownMenuTrigger asChild>
+            <button className="p-1 rounded-full text-black">
+              {isMobileOpen ? <XIcon size={28} /> : <MenuIcon size={28} />}
+            </button>
+          </DropdownMenuTrigger>
 
-        {/* Mobile Menu Overlay */}
-        <div
-          className={`fixed top-15 right-0 bg-white  rounded-xl z-[9999] w-xs transform transition-transform duration-300 flex flex-col items-center p-6 gap-4 ${
-            isMobileOpen ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {links.map((link) => (
-            <div
-              key={link.name}
-              onClick={() => {
-                setIsMobileOpen(false);
-                router.push(link.href);
-              }}
-              className="w-full text-center text-black font-medium hover:text-coral-500 transition-colors border-b border-gray-300 py-2 cursor-pointer"
-            >
-              {link.name}
-            </div>
-          ))}
+          <DropdownMenuContent
+            side="bottom"
+            align="end"
+            className="w-56 bg-white rounded-xl border border-gray-200 shadow-lg py-2 flex flex-col"
+          >
+            {/* Links Group */}
+            <DropdownMenuGroup>
+              {links.map((link) => (
+                <DropdownMenuItem
+                  key={link.name}
+                  onClick={() => {
+                    setIsMobileOpen(false);
+                    router.push(link.href);
+                  }}
+                  className="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  {link.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
 
-          {/* Mobile Auth Button */}
-          {!session ? (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsMobileOpen(false);
-                handleLogin();
-              }}
-              className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer w-full mt-4"
-            >
-              Login
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsMobileOpen(false);
-                handleLogout();
-              }}
-              className="text-white bg-black border-white/30 hover:bg-black/70 cursor-pointer w-full flex justify-center items-center gap-2 mt-4"
-            >
-              <LogOutIcon />
-              Logout
-            </Button>
-          )}
-        </div>
+            <DropdownMenuSeparator className="my-1 border-gray-300" />
+
+            {/* Teacher Options */}
+            {role === "Teacher" && (
+              <DropdownMenuGroup>
+                <DropdownMenuLabel className="px-4 text-gray-700 font-semibold">
+                  Teacher Options
+                </DropdownMenuLabel>
+                <DropdownMenuItem
+                  className="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  onClick={() => {
+                    setIsMobileOpen(false);
+                    router.push("/skills/new");
+                  }}
+                >
+                  Teach
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            )}
+
+            <DropdownMenuSeparator className="my-1 border-gray-300" />
+
+            {/* Auth Button */}
+            <DropdownMenuGroup>
+              {!session ? (
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start px-4 py-2 rounded-lg text-black border border-gray-300 hover:bg-gray-100"
+                    onClick={() => {
+                      setIsMobileOpen(false);
+                      handleLogin();
+                    }}
+                  >
+                    Login
+                  </Button>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start px-4 py-2 rounded-lg text-black border border-gray-300 hover:bg-gray-100 flex items-center gap-2"
+                    onClick={() => {
+                      setIsMobileOpen(false);
+                      handleLogout();
+                    }}
+                  >
+                    <LogOutIcon />
+                    Logout
+                  </Button>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </nav>
   );

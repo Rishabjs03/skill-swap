@@ -68,13 +68,6 @@ const SkillMarket = () => {
               Discover expert mentors and book personalized learning sessions
             </p>
           </div>
-          <Button
-            className="bg-black text-white font-medium px-6 py-3 rounded-lg shadow-md hover:scale-105 transition-transform"
-            onClick={() => router.push("/skills/new")}
-          >
-            <PlusCircle className="mr-2 h-5 w-5" />
-            Teach a Skill
-          </Button>
         </div>
 
         {/* Search + Filters */}

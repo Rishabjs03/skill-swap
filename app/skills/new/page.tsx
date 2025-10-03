@@ -31,6 +31,27 @@ const NewSkills = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setisloading(true);
+
+    if (!Title.trim()) {
+      toast.error("Skill title is required");
+      setisloading(false);
+      return;
+    }
+    if (!category.trim()) {
+      toast.error("Category is required");
+      setisloading(false);
+      return;
+    }
+    if (Rate <= 0) {
+      toast.error("Rate must be greater than 0");
+      setisloading(false);
+      return;
+    }
+    if (!description.trim()) {
+      toast.error("Description is required");
+      setisloading(false);
+      return;
+    }
     const formData = new FormData();
     formData.append("title", Title);
     formData.append("category", category);
@@ -44,6 +65,7 @@ const NewSkills = () => {
         return;
       }
       toast.success("Listed your skill!");
+      router.push("/skills");
       setTitle("");
       setdescription("");
       setcategory("");
@@ -151,7 +173,6 @@ const NewSkills = () => {
                   >
                     Description
                   </Label>
-
                   <Textarea
                     required
                     value={description}
@@ -163,10 +184,9 @@ const NewSkills = () => {
                 <Button
                   type="submit"
                   disabled={isloading}
-                  onClick={() => router.push("/skills")}
                   className="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-2 transition-all duration-300 shadow-md"
                 >
-                  {isloading ? <p>CreateBooking...</p> : <p>Create Skill</p>}
+                  {isloading ? <p>Creating Skill...</p> : <p>Create Skill</p>}
                 </Button>
               </form>
             </CardContent>
