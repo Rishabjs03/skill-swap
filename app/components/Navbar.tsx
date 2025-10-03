@@ -135,22 +135,23 @@ const Navbar = ({ session }: { session: session | null }) => {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
 
-              <hr className="my-1 border-gray-300" />
+              {role === "Teacher" && (
+                <>
+                  <hr className="my-1 border-gray-300" />
 
-              <DropdownMenuLabel className="text-sm font-semibold text-gray-700 px-4 py-1">
-                Teacher Options
-              </DropdownMenuLabel>
-
-              <DropdownMenuGroup>
-                {role === "Teacher" && (
-                  <DropdownMenuItem
-                    className="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    onClick={() => router.push("/skills/new")}
-                  >
-                    Teach
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuGroup>
+                  <DropdownMenuLabel className="text-sm font-semibold text-gray-700 px-4 py-1">
+                    Teacher Options
+                  </DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      className="px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                      onClick={() => router.push("/skills/new")}
+                    >
+                      Teach
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </>
+              )}
 
               <hr className="my-1 border-gray-300" />
 
