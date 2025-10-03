@@ -9,7 +9,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GetMyProfile } from "@/lib/actions/profile";
+import { GetMyProfile, GetUserRole } from "@/lib/actions/profile";
 import { GetSessionUser } from "@/lib/actions/session";
 import { useAuth } from "@/lib/context/auth-context";
 
@@ -44,9 +44,19 @@ const ProfilePage = () => {
   const [User, setuser] = useState<UserProps | null>(null);
   const [sessionUserId, setSessionUserId] = useState<string | null>(null);
   const [isloading, setisloading] = useState(true);
+  const [role, setrole] = useState("");
   const router = useRouter();
   const { user } = useAuth();
   useEffect(() => {
+    GetUserRole()
+      .then((res) => {
+        if (res && res.role) {
+          setrole(res.role);
+        } else {
+          setrole("");
+        }
+      })
+      .catch((err) => console.error(err));
     async function loadProfile() {
       const User = await GetMyProfile();
       const sessionUser = await GetSessionUser();
@@ -188,15 +198,30 @@ const ProfilePage = () => {
                           {User?.name}
                         </h2>
                         <p className="text-xs text-gray-600">{User?.email}</p>
-                        <div className="flex flex-wrap gap-2 pt-2">
-                          <Badge
-                            variant="outline"
-                            className="border-gray-400  rounded-full text-gray-700"
-                          >
-                            <span className="font-semibold py-1 px-1">
-                              {User?.skills.length || 0} Skills
-                            </span>
-                          </Badge>
+                        <div className="flex gap-2">
+                          {role === "Teacher" && (
+                            <div className="flex flex-wrap gap-2 pt-2">
+                              <Badge
+                                variant="outline"
+                                className="border-gray-400  rounded-full text-gray-700"
+                              >
+                                <span className="font-semibold py-1 px-1">
+                                  {User?.skills.length || 0} Skills
+                                </span>
+                              </Badge>
+                            </div>
+                          )}
+
+                          <div className="flex flex-wrap gap-2 pt-2">
+                            <Badge
+                              variant="outline"
+                              className="border-gray-400  rounded-full text-gray-700"
+                            >
+                              <span className="font-semibold py-1 px-1">
+                                {role === "Teacher" ? "Instructor" : "Student"}
+                              </span>
+                            </Badge>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -237,22 +262,28 @@ const ProfilePage = () => {
                   </div>
 
                   {/* Stats */}
-                  <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-300">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-purple-600">
-                        {User?.skills.length}
+                  {role === "Teacher" && (
+                    <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-300">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-purple-600">
+                          {User?.skills.length}
+                        </div>
+                        <div className="text-xs text-gray-600">Skills</div>
                       </div>
-                      <div className="text-xs text-gray-600">Skills</div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-pink-600">
+                          0
+                        </div>
+                        <div className="text-xs text-gray-600">Reviews</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600">
+                          0
+                        </div>
+                        <div className="text-xs text-gray-600">Rating</div>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-pink-600">0</div>
-                      <div className="text-xs text-gray-600">Reviews</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">0</div>
-                      <div className="text-xs text-gray-600">Rating</div>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

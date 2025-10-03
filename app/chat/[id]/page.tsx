@@ -39,8 +39,6 @@ export default function ChatPage() {
   return (
     <div className="min-h-[70vh] w-full px-4 md:px-8 lg:px-16 flex items-center justify-center">
       <div className="w-full md:w-1/3 max-w-2xl py-4 flex flex-col border rounded-2xl shadow-lg bg-white">
-        {/* Chat Header */}
-
         <div className="flex items-center justify-start gap-3 border-b pb-4">
           <div className="ml-2">
             <Button
@@ -60,7 +58,6 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Chat body placeholder */}
         <div className="flex-1 flex items-center justify-center text-gray-500">
           Messages will appear here
         </div>

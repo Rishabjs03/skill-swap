@@ -101,8 +101,8 @@ export default function BookingCard({ booking, userRole }: BookingCardProps) {
 
   return (
     <Card className="group overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 bg-white border-gray-200 border-2">
-      <CardHeader className="flex justify-between items-start pb-1">
-        <div className="flex gap-3 items-center">
+      <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2">
+        <div className="flex gap-3 items-center w-full">
           {displayUser && (
             <Avatar className="w-12 h-12">
               {displayUser.image ? (
@@ -113,13 +113,13 @@ export default function BookingCard({ booking, userRole }: BookingCardProps) {
             </Avatar>
           )}
 
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             {booking.skill.category && (
-              <Badge className="mb-1 rounded-full text-sm bg-black text-white">
+              <Badge className="mb-1 rounded-full text-xs sm:text-sm bg-black text-white w-fit">
                 {booking.skill.category}
               </Badge>
             )}
-            <h3 className="font-semibold text-xl leading-tight group-hover:text-primary transition-colors">
+            <h3 className="font-semibold text-lg sm:text-xl leading-tight group-hover:text-primary transition-colors">
               {booking.skill.title}
             </h3>
             <p className="text-sm font-medium text-gray-500">
@@ -131,14 +131,14 @@ export default function BookingCard({ booking, userRole }: BookingCardProps) {
         </div>
 
         <Badge
-          className={`flex items-center gap-1 px-2 py-1 rounded-full text-white ${statusMap[status].color}`}
+          className={`flex items-center gap-1 px-2 py-1 rounded-full text-white text-xs sm:text-sm ${statusMap[status].color}`}
         >
           <StatusIcon className="w-4 h-4" />
           {statusMap[status].label}
         </Badge>
       </CardHeader>
 
-      <CardContent className="flex justify-between items-center mt-2">
+      <CardContent className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-2">
         <div className="flex flex-col gap-1 text-sm text-gray-600">
           <p className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
@@ -153,14 +153,14 @@ export default function BookingCard({ booking, userRole }: BookingCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="flex gap-2 mt-2">
+      <CardFooter className="flex flex-col sm:flex-row gap-2 mt-2 w-full">
         {userRole === "Teacher" && status === "pending" && (
           <Button
             size="sm"
             variant="default"
             onClick={handleAccept}
             disabled={loading}
-            className="border rounded-lg mr-2"
+            className="border rounded-lg w-full sm:w-auto"
           >
             Accept
           </Button>
@@ -172,7 +172,7 @@ export default function BookingCard({ booking, userRole }: BookingCardProps) {
             variant="secondary"
             onClick={() => router.push(`/chat/${booking.id}`)}
             disabled={loading}
-            className="flex items-center gap-1 border rounded-lg mr-2"
+            className="flex items-center gap-1 border rounded-lg w-full sm:w-auto"
           >
             <MessageSquare className="w-4 h-4" /> Chat
           </Button>
@@ -184,7 +184,7 @@ export default function BookingCard({ booking, userRole }: BookingCardProps) {
             variant="destructive"
             onClick={handleCancel}
             disabled={loading}
-            className="text-white bg-red-500"
+            className="text-white bg-red-500 w-full sm:w-auto"
           >
             Cancel
           </Button>
