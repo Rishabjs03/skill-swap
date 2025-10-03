@@ -42,10 +42,15 @@ export async function getBookingsByUser() {
       where: { skill: { ownerId: session.user.id } },
       include: {
         skill: { include: { owner: true } },
-        user: true, // student info
+        user: true,
       },
       orderBy: { date: "desc" },
-    });
+    }).then(bookings =>
+      bookings.map(b => ({
+        ...b,
+        student: b.user,
+      }))
+    );
   } else {
     return prisma.booking.findMany({
       where: { userId: session.user.id },

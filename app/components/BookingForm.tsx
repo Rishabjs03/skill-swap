@@ -88,6 +88,7 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
         toast.error("Failed to book!");
       }
       toast.success("Booked your session!");
+      router.push("/bookings");
     } catch (error) {
       console.error(error);
       alert("Booking failed");
