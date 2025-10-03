@@ -17,14 +17,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/lib/context/auth-context";
+import { GetUserRole } from "@/lib/actions/profile";
 
 type session = typeof auth.$Infer.Session;
 
 const Navbar = ({ session }: { session: session | null }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [role, setrole] = useState("");
+  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
+  useEffect(() => {
+    if (session) {
+      GetUserRole()
+        .then((res) => {
+          if (res && res.role) {
+            setrole(res.role);
+          } else {
+            setrole("");
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [session]);
   async function handleLogout() {
     await SignOut();
     toast.success("Logged out successfully!");
@@ -74,7 +91,7 @@ const Navbar = ({ session }: { session: session | null }) => {
             Marketplace
           </Button>
         </li>
-        {session && (
+        {role === "Teacher" && (
           <li>
             <Button
               variant="ghost"
@@ -112,7 +129,7 @@ const Navbar = ({ session }: { session: session | null }) => {
           </Button>
         ) : (
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-0">
+            <DropdownMenuTrigger className="border-white rounded-full">
               <Avatar className="w-9 h-9">
                 <AvatarImage src={session?.user.image || "/default.jpg"} />
                 <AvatarFallback>U</AvatarFallback>

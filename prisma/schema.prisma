@@ -23,6 +23,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   bio           String?
+  role          String?
   skills        Skill[]
   reviews       Review[]
   bookings      Booking[]

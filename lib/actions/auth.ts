@@ -2,15 +2,23 @@
 
 import { headers } from "next/headers"
 import { auth } from "../auth"
+import { PrismaClient } from "../generated/prisma"
 
 
-
-export async function SignUpUser(email: string, password: string, name: string) {
+const prisma = new PrismaClient()
+export async function SignUpUser(email: string, password: string, name: string, role: string) {
     const result = await auth.api.signUpEmail({
         body: {
             email, password, name, callbackURL: "/"
         }
     })
+    if (result.user) {
+        await prisma.user.update({
+            where: { id: result.user.id },
+            data: { role },
+        })
+    }
+
     return result
 }
 

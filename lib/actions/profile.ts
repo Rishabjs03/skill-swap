@@ -99,7 +99,6 @@ export async function UpdateProfileAction(formData: FormData) {
     const name = formData.get("name") as string;
     const email = formData.get("email") as string
     const bio = formData.get("bio") as string;
-    const skills = JSON.parse(formData.get("skills") as string) as string[];
     const avatarFile = formData.get("avatar") as File | null;
 
     let imageUrl: string | null = null;
@@ -122,15 +121,6 @@ export async function UpdateProfileAction(formData: FormData) {
     });
 
 
-    await Promise.all(
-        skills.map(title =>
-            prisma.skill.create({
-                data: { title, ownerId: session?.user.id, description: "", rate: 0 },
-            })
-        )
-    );
-
-
     revalidatePath(`/profile/${session?.user.id}`);
 
     return updatedUser;
@@ -138,3 +128,16 @@ export async function UpdateProfileAction(formData: FormData) {
 
 
 
+export async function GetUserRole() {
+    const session = await auth.api.getSession({ headers: await headers() })
+
+    if (!session) {
+        throw new Error("User not authenticated")
+    }
+
+    const userRole = await prisma.user.findUnique({
+        where: { id: session?.user.id },
+        select: { role: true }
+    })
+    return userRole
+}

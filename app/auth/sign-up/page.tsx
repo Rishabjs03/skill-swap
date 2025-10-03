@@ -14,18 +14,33 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { SignUpUser } from "@/lib/actions/auth";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const SignUp = () => {
   const [email, setemail] = useState<string>("");
   const [password, setpassword] = useState<string>("");
   const [isloading, setisloading] = useState<boolean>(false);
   const [name, setname] = useState<string>("");
+  const [role, setrole] = useState("");
   const router = useRouter();
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setisloading(true);
+    if (!role) {
+      toast.error("Please select a role!");
+      setisloading(false);
+      return;
+    }
     try {
-      const result = await SignUpUser(email, password, name);
+      const result = await SignUpUser(email, password, name, role);
       if (!result.user) {
         toast.error("Failed to create an account!");
         console.log("Failed to create an account");
@@ -40,6 +55,7 @@ const SignUp = () => {
     setemail("");
     setpassword("");
     setname("");
+    setrole("");
     setisloading(false);
   }
   return (
@@ -102,10 +118,33 @@ const SignUp = () => {
                 className="bg-white/20 border-black/50 text-black placeholder:text-gray-400"
               />
             </div>
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="Name" className="text-black">
+                  Choose your role
+                </Label>
+              </div>
+              <Select
+                value={role}
+                onValueChange={(value) => setrole(value)}
+                required
+              >
+                <SelectTrigger className="w-full bg-white/20 border-black/50 text-black placeholder:text-gray-400">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent className="border-0 bg-white">
+                  <SelectGroup className="bg-white rounded-lg">
+                    <SelectLabel>Role</SelectLabel>
+                    <SelectItem value="Student">Student</SelectItem>
+                    <SelectItem value="Teacher">Teacher</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
             <Button
               type="submit"
               disabled={isloading ? true : false}
-              className="w-full text-white bg-black hover:bg-black/50"
+              className="w-full text-white bg-black hover:bg-black/50  disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isloading ? <p>Signing up...</p> : <p>Sign Up</p>}
             </Button>
