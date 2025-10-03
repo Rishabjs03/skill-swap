@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { ChevronDownIcon, Clock, DollarSign } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { GetUserRole } from "@/lib/actions/profile";
 
 interface skills {
   id: string;
@@ -31,6 +32,7 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
   const [timeSlot, setTimeSlot] = useState<string>("");
   const [openTime, setOpenTime] = useState(false);
   const [isloading, setisloading] = useState(false);
+  const [role, setrole] = useState("");
   const { user } = useAuth();
   const router = useRouter();
   if (!skill) return null;
@@ -45,16 +47,34 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
     "03:00 PM - 04:00 PM",
     "04:00 PM - 05:00 PM",
   ];
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    GetUserRole()
+      .then((res) => {
+        if (res && res.role) {
+          setrole(res.role);
+        } else {
+          setrole("");
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!user) {
       router.push("/auth/sign-in");
       return;
     }
-
+    if (role === "Teacher") {
+      toast.error("Only a student can book!");
+      return;
+    }
     if (!date) {
       toast.error("Please select a date");
+      return;
+    }
+    if (!timeSlot) {
+      toast.error("Please select a time");
       return;
     }
     setisloading(true);

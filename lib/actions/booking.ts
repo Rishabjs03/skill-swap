@@ -2,23 +2,25 @@
 
 import { headers } from "next/headers";
 import { auth } from "../auth";
-import { PrismaClient } from "../generated/prisma"
+import { PrismaClient } from "../generated/prisma";
 
 const prisma = new PrismaClient();
 
+type BookingStatus = "pending" | "accepted" | "completed" | "cancelled";
+
 export async function CreateBooking(skillId: string, date: string, timeSlot: string) {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) {
-    throw new Error("User not authenticated");
-  }
+  if (!session) throw new Error("User not authenticated");
+
   const bookingDate = new Date(date);
+
   try {
     const booking = await prisma.booking.create({
       data: {
         skillId,
-        userId: session?.user.id,
+        userId: session.user.id,
         date: bookingDate,
-        timeSlot
+        timeSlot,
       },
     });
     return booking;
@@ -29,21 +31,31 @@ export async function CreateBooking(skillId: string, date: string, timeSlot: str
 }
 
 export async function getBookingsByUser() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) {
-    throw new Error("user not logged in")
-  }
-  return prisma.booking.findMany({
-    where: { userId: session?.user.id },
-    include: {
-      skill: {
-        include: { owner: true },
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) throw new Error("User not logged in");
+
+  const userRecord = await prisma.user.findUnique({ where: { id: session.user.id } });
+  if (!userRecord) throw new Error("User not found");
+
+  if (userRecord.role === "Teacher") {
+    return prisma.booking.findMany({
+      where: { skill: { ownerId: session.user.id } },
+      include: {
+        skill: { include: { owner: true } },
+        user: true, // student info
       },
-    },
-    orderBy: { date: "desc" },
-  });
+      orderBy: { date: "desc" },
+    });
+  } else {
+    return prisma.booking.findMany({
+      where: { userId: session.user.id },
+      include: { skill: { include: { owner: true } } },
+      orderBy: { date: "desc" },
+    });
+  }
 }
-export async function updateBookingStatus(bookingId: string, status: string) {
+
+export async function updateBookingStatus(bookingId: string, status: BookingStatus) {
   return prisma.booking.update({
     where: { id: bookingId },
     data: { status },
