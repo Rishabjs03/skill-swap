@@ -28,10 +28,23 @@ interface skills {
 const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
   const [open, setopen] = useState(false);
   const [date, setdate] = useState<Date | undefined>(undefined);
+  const [timeSlot, setTimeSlot] = useState<string>("");
+  const [openTime, setOpenTime] = useState(false);
   const [isloading, setisloading] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
   if (!skill) return null;
+
+  const timeSlots = [
+    "09:00 AM - 10:00 AM",
+    "10:00 AM - 11:00 AM",
+    "11:00 AM - 12:00 PM",
+    "12:00 PM - 01:00 PM",
+    "01:00 PM - 02:00 PM",
+    "02:00 PM - 03:00 PM",
+    "03:00 PM - 04:00 PM",
+    "04:00 PM - 05:00 PM",
+  ];
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,14 +54,15 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
     }
 
     if (!date) {
-      alert("Please select a date");
+      toast.error("Please select a date");
       return;
     }
     setisloading(true);
     try {
       const bookingcreated = await CreateBooking(
         skill?.id,
-        date?.toISOString()
+        date?.toISOString(),
+        timeSlot
       );
       if (!bookingcreated) {
         toast.error("Failed to book!");
@@ -59,6 +73,7 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
       alert("Booking failed");
     } finally {
       setdate(undefined);
+      setTimeSlot("");
       setisloading(false);
     }
   }
@@ -100,6 +115,40 @@ const BookingForm: React.FC<{ skill: skills }> = ({ skill }) => {
                     setopen(false);
                   }}
                 />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="flex w-full flex-col gap-1 mt-2">
+            <Label htmlFor="timeSlot">Session Time</Label>
+            <Popover open={openTime} onOpenChange={setOpenTime}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between font-normal bg-white border-gray-200 border-2 rounded-xl"
+                >
+                  {timeSlot ? timeSlot : "Select time slot"}
+                  <ChevronDownIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="p-2 w-full bg-white  border-gray-200"
+                align="start"
+              >
+                <div className="flex flex-col gap-1">
+                  {timeSlots.map((slot) => (
+                    <Button
+                      key={slot}
+                      variant="ghost"
+                      className="justify-start w-full"
+                      onClick={() => {
+                        setTimeSlot(slot);
+                        setOpenTime(false);
+                      }}
+                    >
+                      {slot}
+                    </Button>
+                  ))}
+                </div>
               </PopoverContent>
             </Popover>
           </div>

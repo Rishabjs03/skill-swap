@@ -23,6 +23,7 @@ interface Booking {
   id: string;
   status: "pending" | "accepted" | "completed" | "cancelled";
   date: string;
+  timeSlot: string | null;
   notes?: string;
   skill: {
     title: string;
@@ -46,6 +47,7 @@ export default function BookingsPage() {
         id: b.id,
         status: b.status as "pending" | "accepted" | "completed" | "cancelled",
         date: b.date.toISOString(),
+        timeSlot: b.timeSlot,
         skill: {
           title: b.skill.title,
           category: b.skill.category || undefined,
@@ -231,10 +233,7 @@ function BookingCard({ booking }: { booking: Booking }) {
           </p>
           <p className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-gray-400" />
-            {new Date(booking.date).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {booking.timeSlot}
           </p>
           {booking.notes && (
             <p className="text-gray-500">Notes: {booking.notes}</p>

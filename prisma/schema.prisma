@@ -55,6 +55,7 @@ model Booking {
   userId    String
   status    String   @default("pending")
   date      DateTime
+  timeSlot  String?
   createdAt DateTime @default(now())
 
   Review Review[]

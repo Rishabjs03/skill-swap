@@ -6,7 +6,7 @@ import { PrismaClient } from "../generated/prisma"
 
 const prisma = new PrismaClient();
 
-export async function CreateBooking(skillId: string, date: string) {
+export async function CreateBooking(skillId: string, date: string, timeSlot: string) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     throw new Error("User not authenticated");
@@ -18,6 +18,7 @@ export async function CreateBooking(skillId: string, date: string) {
         skillId,
         userId: session?.user.id,
         date: bookingDate,
+        timeSlot
       },
     });
     return booking;
