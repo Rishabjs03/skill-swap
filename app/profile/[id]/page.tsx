@@ -184,10 +184,10 @@ const ProfilePage = () => {
                         </AvatarFallback>
                       </Avatar>
                       <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-gray-900">
+                        <h2 className="text-lg font-semibold text-gray-900">
                           {User?.name}
                         </h2>
-                        <p className="text-sm text-gray-600">{User?.email}</p>
+                        <p className="text-xs text-gray-600">{User?.email}</p>
                         <div className="flex flex-wrap gap-2 pt-2">
                           <Badge
                             variant="outline"
@@ -204,7 +204,7 @@ const ProfilePage = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="rounded-bl-xl rounded-tl-xl border border-white/40 bg-white
+                        className="rounded-xl border ml-2 border-white/40 bg-white
              text-gray-800  hover:text-black flex-shrink-0 mt-4 md:mt-0
              shadow-md transition"
                         onClick={() => router.push("/profile/edit")}
