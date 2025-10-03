@@ -65,7 +65,7 @@ const Navbar = ({ session }: { session: session | null }) => {
   ];
 
   return (
-    <nav className="w-full max-w-6xl mx-auto mt-6 px-6 py-3 flex items-center justify-between bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-lg relative z-50">
+    <nav className="  w-full max-w-6xl relative mx-auto mt-6 px-6 py-3 flex items-center justify-between bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-lg  z-50">
       {/* Logo */}
       <div
         className="text-xl font-bold text-black cursor-pointer"
