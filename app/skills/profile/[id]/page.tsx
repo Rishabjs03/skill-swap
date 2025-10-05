@@ -8,9 +8,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GetMyProfile, getUserProfile } from "@/lib/actions/profile";
-import { GetSessionUser } from "@/lib/actions/session";
-
+import { getUserProfile } from "@/lib/actions/profile";
 import { ArrowLeft, Calendar, Edit3 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";

@@ -65,11 +65,11 @@ model Review {
   id        String   @id @default(cuid())
   booking   Booking  @relation(fields: [bookingId], references: [id])
   bookingId String
+  student   User     @relation(fields: [studentId], references: [id])
+  studentId String
   rating    Int
   comment   String
   createdAt DateTime @default(now())
-
-  User User[]
 }
 
 model Session {

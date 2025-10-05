@@ -43,6 +43,7 @@ export async function getBookingsByUser() {
       include: {
         skill: { include: { owner: true } },
         user: true,
+
       },
       orderBy: { date: "desc" },
     }).then(bookings =>
@@ -54,9 +55,17 @@ export async function getBookingsByUser() {
   } else {
     return prisma.booking.findMany({
       where: { userId: session.user.id },
-      include: { skill: { include: { owner: true } } },
+      include: {
+        skill: { include: { owner: true } },
+        user: true, // 👈 student ki id lene ke liye
+      },
       orderBy: { date: "desc" },
-    });
+    }).then(bookings =>
+      bookings.map(b => ({
+        ...b,
+        student: b.user, // ✅ student object add kar diya
+      }))
+    );
   }
 }
 

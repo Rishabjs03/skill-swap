@@ -58,7 +58,6 @@ const SkillMarket = () => {
   return (
     <div className="min-h-[70vh] w-full px-4 md:px-8 lg:px-16">
       <div className="w-full py-8">
-        {/* Header Section */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mb-12">
           <div className="text-center lg:text-left">
             <h1 className="text-3xl md:text-4xl font-semibold mb-2">
@@ -70,10 +69,8 @@ const SkillMarket = () => {
           </div>
         </div>
 
-        {/* Search + Filters */}
         <div className="bg-white w-full  rounded-xl md:rounded-full p-4 md:p-6 mb-8 border-gray-200 border-2">
           <div className="flex flex-col md:flex-row gap-4">
-            {/* Search Input */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
@@ -84,7 +81,6 @@ const SkillMarket = () => {
               />
             </div>
 
-            {/* Category Select */}
             <Select value={category} onValueChange={(v) => setcategory(v)}>
               <SelectTrigger className="w-full md:w-48 bg-white rounded-xl shadow-md border-gray-200 border-2 text-black">
                 <SelectValue placeholder="All categories" />
@@ -101,7 +97,6 @@ const SkillMarket = () => {
               </SelectContent>
             </Select>
 
-            {/* Price Select */}
             <Select value={rate} onValueChange={(v) => setrate(v)}>
               <SelectTrigger className="w-full md:w-40 bg-white rounded-xl shadow-md border-gray-200 border-2">
                 <SelectValue placeholder="All prices" />
@@ -117,7 +112,6 @@ const SkillMarket = () => {
               </SelectContent>
             </Select>
 
-            {/* Clear Button */}
             <Button
               variant="outline"
               onClick={() => {

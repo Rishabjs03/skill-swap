@@ -1,10 +1,11 @@
 "use client";
 import BookingForm from "@/app/components/BookingForm";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GetSessionUser } from "@/lib/actions/session";
+
 import { getSkill } from "@/lib/actions/skill";
 import { ArrowLeft, Calendar, CheckCircle, Clock } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -144,17 +145,17 @@ const SingleSkillPage = () => {
             <Card className=" bg-white shadow-xl border-gray-200 border-2">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold">
-                  What You&apos;ll Learn
+                  What You&apos;ll Gain
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3">
                   {[
-                    "Modern development best practices and patterns",
-                    "Real-world project experience and code reviews",
-                    "Industry-standard tools and workflows",
-                    "Personalized feedback and mentorship",
-                    "Problem-solving techniques and debugging skills",
+                    "Hands-on experience with modern tools, methods, and best practices",
+                    "Real-world project exposure to strengthen your portfolio",
+                    "Guidance on industry-standard workflows and collaboration styles",
+                    "Personalized feedback to improve faster and smarter",
+                    "Practical problem-solving and debugging skills that apply anywhere",
                   ].map((item, index) => (
                     <div key={index} className="flex items-start space-x-3">
                       <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
@@ -165,6 +166,7 @@ const SingleSkillPage = () => {
               </CardContent>
             </Card>
           </div>
+
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
               {!showBookingForm ? (
