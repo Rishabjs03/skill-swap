@@ -68,7 +68,7 @@ export default function Homepage() {
           Why SkillSwap?
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto">
           {[
             {
               icon: <Users size={32} />,
@@ -129,7 +129,7 @@ export default function Homepage() {
               {
                 step: 1,
                 title: "Sign Up and Create Your Profile",
-                desc: "Get started by creating a profile so others can find you.",
+                desc: "Get started by creating a profile!",
               },
               {
                 step: 2,
@@ -154,7 +154,7 @@ export default function Homepage() {
                         {s.title}
                       </h3>
                     </div>
-                    <p className="text-gray-600 mt-2 text-sm md:text-base">
+                    <p className="text-gray-600 mt-2 text-sm md:text-sm">
                       {s.desc}
                     </p>
                   </div>

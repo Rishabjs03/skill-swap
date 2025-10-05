@@ -7,7 +7,7 @@ import { GetMyProfile, UpdateProfileAction } from "@/lib/actions/profile";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
 
 const EditPage = () => {
@@ -46,6 +46,12 @@ const EditPage = () => {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!gmailRegex.test(email)) {
+      toast.error("Only emails are allowed!");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("name", name);
@@ -116,7 +122,7 @@ const EditPage = () => {
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
+                    placeholder="Email (must be @gmail.com)"
                     className="bg-white rounded-xl shadow-xl border-white/20 text-black"
                   />
                 </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,6 +20,10 @@ export function AuthProvider({
   children: React.ReactNode;
 }) {
   const [currentUser, setCurrentUser] = useState(user);
+
+  useEffect(() => {
+    setCurrentUser(user);
+  }, [user]);
 
   return (
     <AuthContext.Provider
